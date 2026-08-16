@@ -67,10 +67,99 @@ light:
     variant: WS2812
     pin: GPIO10
     num_leds: 3
-    name: "Status LEDs"
-    id: status_leds
+    name: "LED Strip"
+    id: led_strip
+    restore_mode: ALWAYS_OFF
+    internal: true
+  - platform: partition
+    name: "Status LED"
+    id: led_status
     restore_mode: ALWAYS_OFF
     entity_category: config
+    segments:
+      - id: led_strip
+        from: 0
+        to: 0
+  - platform: partition
+    name: "Zone 1 LED"
+    id: led_zone1
+    restore_mode: ALWAYS_OFF
+    entity_category: config
+    segments:
+      - id: led_strip
+        from: 1
+        to: 1
+  - platform: partition
+    name: "Zone 2 LED"
+    id: led_zone2
+    restore_mode: ALWAYS_OFF
+    entity_category: config
+    segments:
+      - id: led_strip
+        from: 2
+        to: 2
+
+globals:
+  - id: led_status_saved_state
+    type: bool
+    restore_value: false
+    initial_value: 'false'
+  - id: led_status_saved_r
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_status_saved_g
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_status_saved_b
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_status_saved_brightness
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone1_saved_state
+    type: bool
+    restore_value: false
+    initial_value: 'false'
+  - id: led_zone1_saved_r
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone1_saved_g
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone1_saved_b
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone1_saved_brightness
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone2_saved_state
+    type: bool
+    restore_value: false
+    initial_value: 'false'
+  - id: led_zone2_saved_r
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone2_saved_g
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone2_saved_b
+    type: float
+    restore_value: false
+    initial_value: '0'
+  - id: led_zone2_saved_brightness
+    type: float
+    restore_value: false
+    initial_value: '0'
 
 number:
   - platform: template
@@ -88,7 +177,7 @@ number:
     icon: "mdi:brightness-5"
     entity_category: config
     on_value:
-      - lambda: 'id(illuminance_sensor).update();'
+      - script.execute: measure_illuminance
 
 sensor:
   - platform: bh1750
@@ -96,7 +185,7 @@ sensor:
     id: illuminance_sensor
     i2c_id: bus_a
     address: 0x23
-    update_interval: ${illuminance_update_interval}
+    update_interval: never
     accuracy_decimals: 0
     filters:
       - lambda: "return x + id(illuminance_offset_ui).state;"
@@ -105,6 +194,64 @@ sensor:
         - delta: 5
       - clamp:
           min_value: 0
+
+interval:
+  - interval: ${illuminance_update_interval}
+    then:
+      - script.execute: measure_illuminance
+
+script:
+  - id: measure_illuminance
+    mode: single
+    then:
+      # Save current LED states
+      - lambda: |-
+          auto sv = id(led_status).current_values;
+          id(led_status_saved_state) = sv.is_on();
+          id(led_status_saved_r) = sv.get_red();
+          id(led_status_saved_g) = sv.get_green();
+          id(led_status_saved_b) = sv.get_blue();
+          id(led_status_saved_brightness) = sv.get_brightness();
+          auto z1 = id(led_zone1).current_values;
+          id(led_zone1_saved_state) = z1.is_on();
+          id(led_zone1_saved_r) = z1.get_red();
+          id(led_zone1_saved_g) = z1.get_green();
+          id(led_zone1_saved_b) = z1.get_blue();
+          id(led_zone1_saved_brightness) = z1.get_brightness();
+          auto z2 = id(led_zone2).current_values;
+          id(led_zone2_saved_state) = z2.is_on();
+          id(led_zone2_saved_r) = z2.get_red();
+          id(led_zone2_saved_g) = z2.get_green();
+          id(led_zone2_saved_b) = z2.get_blue();
+          id(led_zone2_saved_brightness) = z2.get_brightness();
+      # Turn off all LEDs
+      - light.turn_off: led_status
+      - light.turn_off: led_zone1
+      - light.turn_off: led_zone2
+      # Wait for LEDs to fully quench before sampling
+      - delay: 50ms
+      # Take measurement
+      - component.update: illuminance_sensor
+      # Restore LEDs to their previous state
+      - lambda: |-
+          if (id(led_status_saved_state)) {
+            auto call = id(led_status).turn_on();
+            call.set_rgb(id(led_status_saved_r), id(led_status_saved_g), id(led_status_saved_b));
+            call.set_brightness(id(led_status_saved_brightness));
+            call.perform();
+          }
+          if (id(led_zone1_saved_state)) {
+            auto call = id(led_zone1).turn_on();
+            call.set_rgb(id(led_zone1_saved_r), id(led_zone1_saved_g), id(led_zone1_saved_b));
+            call.set_brightness(id(led_zone1_saved_brightness));
+            call.perform();
+          }
+          if (id(led_zone2_saved_state)) {
+            auto call = id(led_zone2).turn_on();
+            call.set_rgb(id(led_zone2_saved_r), id(led_zone2_saved_g), id(led_zone2_saved_b));
+            call.set_brightness(id(led_zone2_saved_brightness));
+            call.perform();
+          }
 
 button:
   - platform: restart
