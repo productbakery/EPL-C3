@@ -221,6 +221,17 @@ jobs:
       esphome_version: latest
       directory_name: everything-presence-lite-ha-mr24hpc1-no-ble-co2
 
+  publish-epl-c3-productbakery:
+    name: Publish EPL C3 ProductBakery
+    uses: EverythingSmartHome/everything-presence-lite/.github/workflows/esphome-build.yml@main
+    with:
+      files: epl-c3-productbakery.yaml
+      name: EPL C3 ProductBakery
+      manifest_filename: epl-c3-productbakery-manifest.json
+      clean: false
+      esphome_version: latest
+      directory_name: epl-c3-productbakery
+
   # Generate firmware index after all builds complete
   generate-firmware-index:
     name: Generate Firmware Index
@@ -246,6 +257,7 @@ jobs:
       - publish-everything-presence-lite-ha-sen0609-no-ble-co2
       - publish-everything-presence-lite-ha-mr24hpc1-co2
       - publish-everything-presence-lite-ha-mr24hpc1-no-ble-co2
+      - publish-epl-c3-productbakery
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository

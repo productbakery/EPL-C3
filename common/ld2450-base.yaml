@@ -1,3 +1,7 @@
+substitutions:
+  ld2450_uart_tx_pin: GPIO17
+  ld2450_uart_rx_pin: GPIO16
+
 esphome:
   on_boot: 
     priority: -100
@@ -994,12 +998,12 @@ text:
 uart:
   id: uart_bus
   tx_pin: 
-    number: GPIO17
+    number: ${ld2450_uart_tx_pin}
     mode:
       input: true
       pullup: true
   rx_pin: 
-    number: GPIO16
+    number: ${ld2450_uart_rx_pin}
     mode:
       input: true
       pullup: true
