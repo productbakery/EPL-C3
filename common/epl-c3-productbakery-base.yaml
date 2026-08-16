@@ -62,9 +62,9 @@ i2c:
     scan: true
 
 light:
-  - platform: neopixelbus
-    type: GRB
-    variant: WS2812
+  - platform: esp32_rmt_led_strip
+    rgb_order: GRB
+    chipset: WS2812
     pin: GPIO10
     num_leds: 3
     name: "LED Strip"
