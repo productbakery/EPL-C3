@@ -1,0 +1,39 @@
+name: Build C3 firmware only
+
+on:
+  workflow_dispatch:
+    inputs:
+      esphome_version:
+        description: ESPHome version to build with
+        required: false
+        default: latest
+        type: string
+  push:
+    branches:
+      - copilot/add-esp32-c3-variant-config
+
+jobs:
+  build-c3:
+    name: Build EPL C3 ProductBakery
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build firmware
+        id: esphome-build
+        uses: esphome/build-action@v6
+        with:
+          yaml-file: epl-c3-productbakery.yaml
+          version: ${{ inputs.esphome_version || 'latest' }}
+
+      - name: Collect build output
+        run: |
+          mkdir output
+          mv "${{ steps.esphome-build.outputs.name }}" output/epl-c3-productbakery
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: epl-c3-productbakery
+          path: output
