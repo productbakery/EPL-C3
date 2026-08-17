@@ -51,7 +51,7 @@ ota:
     id: ota_esphome
 
 wifi:
-  ap: {}
+  # ap: {}
   on_connect:
     - light.turn_on:
         id: led_main
