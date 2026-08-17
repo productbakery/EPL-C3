@@ -3,14 +3,14 @@ substitutions:
   friendly_name: "EPL C3 ProductBakery"
   illuminance_update_interval: "2s"
   hidden_ssid: "false"
-  log_level: ERROR
+  log_level: DEBUG
   # LD2450 UART pins for ESP32-C3-MINI
   ld2450_uart_tx_pin: GPIO21
   ld2450_uart_rx_pin: GPIO20
 
   device_config:
     ethernet_enabled: false
-    bluetooth_enabled: false
+    bluetooth_enabled: true
     board_revision: "c3-1.0"
     sensor_variant: "ld2450"
     firmware_channel: "stable"
@@ -19,3 +19,4 @@ substitutions:
 packages:
   device_base: !include common/epl-c3-productbakery-base.yaml
   ld2450_base: !include common/ld2450-base.yaml
+  bluetooth_base: !include common/bluetooth-base.yaml
