@@ -16,6 +16,10 @@ substitutions:
     firmware_channel: "stable"
     model: "epl-c3-productbakery"
 
+dashboard_import:
+  package_import_url: github://productbakery/EPL-C3/epl-c3-productbakery.yaml@copilot/add-esp32-c3-variant-config
+  import_full_config: false
+
 packages:
   device_base: !include common/epl-c3-productbakery-base.yaml
   ld2450_base: !include common/ld2450-base.yaml
