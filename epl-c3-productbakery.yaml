@@ -1,9 +1,9 @@
 substitutions:
-  name: "epl-c3-productbakery"
-  friendly_name: "EPL C3 ProductBakery"
-  illuminance_update_interval: "2s"
+  name: "epl-c3"
+  friendly_name: "EPL-C3"
+  illuminance_update_interval: "30s"
   hidden_ssid: "false"
-  log_level: DEBUG
+  log_level: ERROR
   # LD2450 UART pins for ESP32-C3-MINI
   ld2450_uart_tx_pin: GPIO21
   ld2450_uart_rx_pin: GPIO20
