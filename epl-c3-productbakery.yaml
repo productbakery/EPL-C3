@@ -19,4 +19,4 @@ substitutions:
 packages:
   device_base: !include common/epl-c3-productbakery-base.yaml
   ld2450_base: !include common/ld2450-base.yaml
-  bluetooth_base: !include common/bluetooth-base.yaml
+  bluetooth_base: !include common/bluetooth-base-minimal.yaml
