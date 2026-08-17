@@ -57,15 +57,15 @@ improv_serial:
 
 i2c:
   - id: bus_a
-    sda: GPIO8
-    scl: GPIO9
+    sda: GPIO0
+    scl: GPIO1
     scan: true
 
 light:
   - platform: esp32_rmt_led_strip
-    rgb_order: GRB
-    chipset: WS2812
-    pin: GPIO10
+    rgb_order: GRBW
+    chipset: SK6812
+    pin: GPIO4
     num_leds: 3
     name: "LED Strip"
     id: led_strip

@@ -5,8 +5,8 @@ substitutions:
   hidden_ssid: "false"
   log_level: ERROR
   # LD2450 UART pins for ESP32-C3-MINI
-  ld2450_uart_tx_pin: GPIO20
-  ld2450_uart_rx_pin: GPIO21
+  ld2450_uart_tx_pin: GPIO21
+  ld2450_uart_rx_pin: GPIO20
 
   device_config:
     ethernet_enabled: false

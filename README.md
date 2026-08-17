@@ -27,18 +27,18 @@ A community variant for custom hardware built around the **ESP32-C3-MINI** modul
 | MCU / Module | ESP32-C3-MINI |
 | mmWave sensor | Hi-Link LD2450 (UART, 256 000 baud) |
 | Ambient light | BH1750 (I²C) |
-| LED strip | 3× WS2812 NeoPixel |
+| LED strip | 3× SK6812 NeoPixel |
 
 **Pin mapping:**
 
 | Signal | GPIO |
 |--------|------|
-| LD2450 UART TX | GPIO20 |
-| LD2450 UART RX | GPIO21 |
-| BH1750 SDA | GPIO8 |
-| BH1750 SCL | GPIO9 |
-| WS2812 DIN | GPIO10 |
-| WS2812 count | 3 |
+| LD2450 UART TX | GPIO21 |
+| LD2450 UART RX | GPIO20 |
+| BH1750 SDA | GPIO0 |
+| BH1750 SCL | GPIO1 |
+| SK6812 DIN | GPIO4 |
+| SK6812 count | 3 |
 
 **Flashing:**
 
