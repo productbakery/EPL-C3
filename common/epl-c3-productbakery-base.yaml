@@ -21,6 +21,12 @@ esphome:
           } else {
             id(firmware_co2).publish_state("Disabled");
           }
+      - light.turn_on:
+          id: led_status
+          brightness: 60%
+          red: 50%
+          green: 50%
+          blue: 0%
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -52,6 +58,21 @@ ota:
     id: ota_esphome
 
 wifi:
+  on_connect:
+      - light.turn_on:
+          id: led_status
+          brightness: 50%
+          red: 0%
+          green: 100%
+          blue: 0%
+    
+  on_disconnect:
+    - light.turn_on:
+        id: led_status
+        brightness: 50%
+        red: 100%
+        green: 0%
+        blue: 0%
 
 improv_serial:
 
