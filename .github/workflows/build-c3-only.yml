@@ -8,6 +8,9 @@ on:
         required: false
         default: latest
         type: string
+  push:
+    branches:
+      - copilot/add-esp32-c3-variant-config
 
 jobs:
   build-c3:
