@@ -3,7 +3,7 @@ substitutions:
   friendly_name: "EPL-C3"
   illuminance_update_interval: "30s"
   hidden_ssid: "false"
-  log_level: ERROR
+  log_level: DEBUG
   # LD2450 UART pins for ESP32-C3-MINI
   ld2450_uart_tx_pin: GPIO21
   ld2450_uart_rx_pin: GPIO20
