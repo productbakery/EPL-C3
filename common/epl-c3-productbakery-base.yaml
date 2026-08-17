@@ -22,7 +22,7 @@ esphome:
             id(firmware_co2).publish_state("Disabled");
           }
       - light.turn_on:
-          id: led_status
+          id: led_main
           brightness: 60%
           red: 50%
           green: 50%
@@ -59,16 +59,16 @@ ota:
 
 wifi:
   on_connect:
-      - light.turn_on:
-          id: led_status
-          brightness: 50%
-          red: 0%
-          green: 100%
-          blue: 0%
+    - light.turn_on:
+        id: led_main
+        brightness: 50%
+        red: 0%
+        green: 100%
+        blue: 0%
     
   on_disconnect:
     - light.turn_on:
-        id: led_status
+        id: led_main
         brightness: 50%
         red: 100%
         green: 0%
@@ -101,8 +101,8 @@ light:
     restore_mode: ALWAYS_OFF
     internal: true
   - platform: partition
-    name: "Status LED"
-    id: led_status
+    name: "Main LED"
+    id: led_main
     restore_mode: ALWAYS_OFF
     entity_category: config
     segments:
@@ -129,23 +129,23 @@ light:
         to: 2
 
 globals:
-  - id: led_status_saved_state
+  - id: led_main_saved_state
     type: bool
     restore_value: false
     initial_value: 'false'
-  - id: led_status_saved_r
+  - id: led_main_saved_r
     type: float
     restore_value: false
     initial_value: '0'
-  - id: led_status_saved_g
+  - id: led_main_saved_g
     type: float
     restore_value: false
     initial_value: '0'
-  - id: led_status_saved_b
+  - id: led_main_saved_b
     type: float
     restore_value: false
     initial_value: '0'
-  - id: led_status_saved_brightness
+  - id: led_main_saved_brightness
     type: float
     restore_value: false
     initial_value: '0'
