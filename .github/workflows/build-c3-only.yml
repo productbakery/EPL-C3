@@ -25,7 +25,7 @@ jobs:
         uses: esphome/build-action@v6
         with:
           yaml-file: epl-c3-productbakery.yaml
-          version: ${{ inputs.esphome_version }}
+          version: ${{ inputs.esphome_version || 'latest' }}
 
       - name: Collect build output
         run: |
