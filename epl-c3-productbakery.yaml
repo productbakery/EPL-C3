@@ -10,7 +10,6 @@ substitutions:
 
   device_config:
     ethernet_enabled: false
-    co2_enabled: false
     bluetooth_enabled: false
     board_revision: "c3-1.0"
     sensor_variant: "ld2450"

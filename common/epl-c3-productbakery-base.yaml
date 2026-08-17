@@ -15,12 +15,6 @@ esphome:
           } else {
             id(firmware_ble).publish_state("Disabled");
           }
-
-          if (std::string("${ device_config.co2_enabled | lower }") == "true") {
-            id(firmware_co2).publish_state("Enabled");
-          } else {
-            id(firmware_co2).publish_state("Disabled");
-          }
       - light.turn_on:
           id: led_main
           brightness: 60%
@@ -46,7 +40,6 @@ api:
       then:
         - api.respond:
             data: !lambda |-
-              root["co2_enabled"]       = ${ device_config.co2_enabled | lower };
               root["bluetooth_enabled"] = ${ device_config.bluetooth_enabled | lower };
               root["board_revision"]    = "${ device_config.board_revision }";
               root["sensor_variant"]    = "${ device_config.sensor_variant }";
@@ -58,6 +51,7 @@ ota:
     id: ota_esphome
 
 wifi:
+  ap: {}
   on_connect:
     - light.turn_on:
         id: led_main
@@ -92,7 +86,7 @@ light:
     entity_category: config
 
   - platform: esp32_rmt_led_strip
-    rgb_order: GRB
+    rgb_order: GRBW
     chipset: SK6812
     pin: GPIO4
     num_leds: 3
@@ -235,12 +229,12 @@ script:
     then:
       # Save current LED states
       - lambda: |-
-          auto sv = id(led_status).current_values;
-          id(led_status_saved_state) = sv.is_on();
-          id(led_status_saved_r) = sv.get_red();
-          id(led_status_saved_g) = sv.get_green();
-          id(led_status_saved_b) = sv.get_blue();
-          id(led_status_saved_brightness) = sv.get_brightness();
+          auto sv = id(led_main).current_values;
+          id(led_main_saved_state) = sv.is_on();
+          id(led_main_saved_r) = sv.get_red();
+          id(led_main_saved_g) = sv.get_green();
+          id(led_main_saved_b) = sv.get_blue();
+          id(led_main_saved_brightness) = sv.get_brightness();
           auto z1 = id(led_zone1).current_values;
           id(led_zone1_saved_state) = z1.is_on();
           id(led_zone1_saved_r) = z1.get_red();
@@ -254,7 +248,7 @@ script:
           id(led_zone2_saved_b) = z2.get_blue();
           id(led_zone2_saved_brightness) = z2.get_brightness();
       # Turn off all LEDs
-      - light.turn_off: led_status
+      - light.turn_off: led_main
       - light.turn_off: led_zone1
       - light.turn_off: led_zone2
       # Wait for LEDs to fully quench before sampling
@@ -263,10 +257,10 @@ script:
       - component.update: illuminance_sensor
       # Restore LEDs to their previous state
       - lambda: |-
-          if (id(led_status_saved_state)) {
-            auto call = id(led_status).turn_on();
-            call.set_rgb(id(led_status_saved_r), id(led_status_saved_g), id(led_status_saved_b));
-            call.set_brightness(id(led_status_saved_brightness));
+          if (id(led_main_saved_state)) {
+            auto call = id(led_main).turn_on();
+            call.set_rgb(id(led_main_saved_r), id(led_main_saved_g), id(led_main_saved_b));
+            call.set_brightness(id(led_main_saved_brightness));
             call.perform();
           }
           if (id(led_zone1_saved_state)) {
@@ -296,18 +290,6 @@ select:
     id: firmware_ble
     name: Bluetooth Proxy
     icon: "mdi:bluetooth"
-    entity_category: diagnostic
-    optimistic: true
-    restore_value: true
-    options:
-      - "Disabled"
-      - "Enabled"
-    initial_option: "Disabled"
-
-  - platform: template
-    id: firmware_co2
-    name: CO2 Sensor
-    icon: "mdi:molecule-co2"
     entity_category: diagnostic
     optimistic: true
     restore_value: true
