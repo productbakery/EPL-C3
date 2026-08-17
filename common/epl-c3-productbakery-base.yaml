@@ -62,8 +62,16 @@ i2c:
     scan: true
 
 light:
+  - platform: status_led
+    name: ESP32 LED
+    id: esp32_led
+    pin: GPIO08
+    internal: False
+    restore_mode: ALWAYS_OFF
+    entity_category: config
+
   - platform: esp32_rmt_led_strip
-    rgb_order: GRBW
+    rgb_order: GRB
     chipset: SK6812
     pin: GPIO4
     num_leds: 3
