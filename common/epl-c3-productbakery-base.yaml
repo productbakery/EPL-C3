@@ -86,7 +86,7 @@ light:
     entity_category: config
 
   - platform: esp32_rmt_led_strip
-    rgb_order: GRBW
+    rgb_order: GRB
     chipset: SK6812
     pin: GPIO4
     num_leds: 3
